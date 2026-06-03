@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meaning Group · Proyecto HubSpot</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #f8f7f4;
+  color: #1a1a18;
+  min-height: 100vh;
+}
+
+.hero {
+  background: white;
+  border-bottom: 1px solid #e8e4df;
+  padding: 56px 48px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 320px; height: 320px;
+  background: radial-gradient(circle, rgba(155,111,47,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  font-family: 'DM Sans', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9b6f2f;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.15;
+  color: #1a1a18;
+  margin-bottom: 10px;
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: #888;
+  font-weight: 300;
+  max-width: 520px;
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.status-active {
+  background: #e6f7ef;
+  color: #1a7a4a;
+}
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #1a7a4a;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.status-meta {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  border-color: #9b6f2f;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+}
+.card::after {
+  content: '→';
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-size: 18px;
+  color: #e0dbd4;
+  transition: all 0.2s;
+}
+.card:hover::after {
+  color: #9b6f2f;
+  transform: translateX(3px);
+}
+
+.card-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 600;
+  opacity: 0.07;
+  line-height: 1;
+  margin-bottom: 12px;
+  color: #1a1a18;
+}
+
+.card-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.card-tag {
+  display: inline-block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a18;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.card-desc {
+  font-size: 13.5px;
+  color: #888;
+  line-height: 1.65;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f4f2ef;
+}
+.card-chip {
+  font-size: 11px;
+  background: #f4f2ef;
+  color: #777;
+  padding: 3px 9px;
+  border-radius: 4px;
+}
+
+.divider {
+  height: 1px;
+  background: #e8e4df;
+  margin: 40px 0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.info-card {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.info-val {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1a1a18;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 4px;
+}
+.info-lbl {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.footer {
+  border-top: 1px solid #e8e4df;
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+}
+.footer-brand {
+  font-size: 13px;
+  color: #aaa;
+}
+.footer-brand strong {
+  color: #555;
+  font-weight: 500;
+}
+.footer-note {
+  font-size: 12px;
+  color: #ccc;
+}
+
+@media (max-width: 600px) {
+  .hero { padding: 40px 24px 36px; }
+  .footer { flex-direction: column; gap: 8px; text-align: center; padding: 20px 24px; }
+  .cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Proyecto · Reimplementación HubSpot CRM</div>
+  <h1 class="hero-title">Meaning Group<br>Colectivo Aquí y Ahora</h1>
+  <p class="hero-sub">Documentación del proceso de diagnóstico y propuesta de implementación para el CRM HubSpot.</p>
+  <div class="status-row">
+    <div class="status-badge status-active">
+      <div class="status-dot"></div>
+      Proyecto activo
+    </div>
+    <div class="status-meta">Fase de diagnóstico completada · Junio 2026</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="section-label">Documentos del proyecto</div>
+
+  <div class="cards">
+
+    <a class="card" href="meaning_group_diagnostico.html">
+      <div class="card-number">01</div>
+      <div class="card-tag" style="background:#fdf3e7; color:#9b6f2f;">Diagnóstico</div>
+      <div class="card-title">Levantamiento de procesos · 5 sesiones</div>
+      <div class="card-desc">Consolidación completa del diagnóstico: auditoría HubSpot, procesos de SAC, valoración clínica y Casa CAYA. Incluye actores, dolores y mapa de qué construir.</div>
+      <div class="card-meta">
+        <span class="card-chip">5 sesiones</span>
+        <span class="card-chip">Auditoría</span>
+        <span class="card-chip">SAC</span>
+        <span class="card-chip">Valoración</span>
+        <span class="card-chip">Casa CAYA</span>
+      </div>
+    </a>
+
+    <a class="card" href="hubspot_implementacion_mg.html">
+      <div class="card-number">02</div>
+      <div class="card-tag" style="background:#e6f7ef; color:#1a7a4a;">Implementación</div>
+      <div class="card-title">Propuesta HubSpot · Vista de sistema</div>
+      <div class="card-desc">Simulación funcional de cómo quedarán configurados los tres pipelines en HubSpot: SAC, Ambulatorio y Casa CAYA. Incluye workflows, propiedades y dashboards.</div>
+      <div class="card-meta">
+        <span class="card-chip">3 pipelines</span>
+        <span class="card-chip">11 workflows</span>
+        <span class="card-chip">Propiedades</span>
+        <span class="card-chip">Dashboard</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label">Cifras clave del diagnóstico</div>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-val">857</div>
+      <div class="info-lbl">Leads promedio por mes</div>
+    </div>
+    <div class="info-card">
+      <div class="info-val">11.3%</div>
+      <div class="info-lbl">Conversión contacto → valoración</div>
+    </div>
+    <div class="info-card">
+      <div class="info-val">~50%</div>
+      <div class="info-lbl">Conversión valoración → tratamiento</div>
+    </div>
+    <div class="info-card">
+      <div class="info-val">3</div>
+      <div class="info-lbl">Procesos a implementar en Fase 1</div>
+    </div>
+    <div class="info-card">
+      <div class="info-val">11</div>
+      <div class="info-lbl">Workflows de automatización</div>
+    </div>
+    <div class="info-card">
+      <div class="info-val">5</div>
+      <div class="info-lbl">Sesiones de diagnóstico realizadas</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="footer-brand">
+    <strong>Consultoría HubSpot</strong> · Proyecto Meaning Group
+  </div>
+  <div class="footer-note">consultoriahs.github.io/meaning-group</div>
+</div>
+
+</body>
+</html>
