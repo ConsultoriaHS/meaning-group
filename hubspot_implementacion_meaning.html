@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HubSpot — Meaning Group · Implementación</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f4f4f0;
+  color: #1a1a18;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── CHROME ── */
+.hs-chrome {
+  display: grid;
+  grid-template-columns: 56px 220px 1fr;
+  grid-template-rows: 48px 1fr;
+  height: 100vh;
+  min-height: 700px;
+}
+
+.hs-topbar {
+  grid-column: 1 / -1;
+  background: #fff9f5;
+  border-bottom: 1px solid #e8e4df;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hs-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ff7a59;
+  min-width: 40px;
+}
+.hs-logo-icon {
+  width: 28px; height: 28px;
+  background: #ff7a59;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.hs-topbar-nav {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+.hs-topbar-item {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-weight: 400;
+}
+.hs-topbar-item:hover { background: #f0ede9; }
+.hs-topbar-item.active { background: #fff3ef; color: #ff7a59; font-weight: 500; }
+
+.hs-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+.hs-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #e8583a;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── ICON NAV ── */
+.hs-iconbar {
+  background: #fff9f5;
+  border-right: 1px solid #e8e4df;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  gap: 4px;
+}
+.hs-icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: #888;
+  font-size: 16px;
+  transition: all 0.15s;
+}
+.hs-icon-btn:hover { background: #f0ede9; color: #444; }
+.hs-icon-btn.active { background: #fff3ef; color: #ff7a59; }
+
+/* ── LEFT NAV ── */
+.hs-sidenav {
+  background: #fff9f5;
+  border-right: 1px solid #e8e4df;
+  overflow-y: auto;
+  padding: 16px 0;
+}
+.hs-sidenav::-webkit-scrollbar { width: 3px; }
+.hs-sidenav::-webkit-scrollbar-thumb { background: #e0dcd7; }
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #aaa9a6;
+  padding: 12px 16px 6px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  cursor: pointer;
+  color: #555;
+  font-size: 13px;
+  border-radius: 0;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+}
+.nav-item:hover { background: #f0ede9; color: #222; }
+.nav-item.active { background: #fff3ef; color: #e8583a; border-left-color: #e8583a; font-weight: 500; }
+.nav-icon { font-size: 14px; width: 18px; text-align: center; opacity: 0.7; }
+.nav-badge {
+  margin-left: auto;
+  background: #e8583a;
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 8px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* ── MAIN AREA ── */
+.hs-main {
+  overflow-y: auto;
+  background: #f4f4f0;
+  display: flex;
+  flex-direction: column;
+}
+.hs-main::-webkit-scrollbar { width: 4px; }
+.hs-main::-webkit-scrollbar-thumb { background: #d8d5d0; }
+
+/* ── VIEW SWITCHER ── */
+.view-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px 0;
+}
+.view-tab {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+.view-tab:hover { background: #eae8e3; }
+.view-tab.active { background: white; border-color: #e0dcd7; color: #222; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.view-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a18;
+}
+.view-subtitle { font-size: 12px; color: #888; }
+
+/* ── PROCESS TABS ── */
+.process-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #e0dcd7;
+  padding: 0 24px;
+  background: white;
+  margin-top: 0;
+}
+.ptab {
+  padding: 10px 18px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  font-weight: 400;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ptab:hover { color: #333; }
+.ptab.active { color: #e8583a; border-bottom-color: #e8583a; font-weight: 500; }
+.ptab-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+/* ── PIPELINE VIEW ── */
+.pipeline-area {
+  padding: 20px 24px;
+  overflow-x: auto;
+  flex: 1;
+}
+
+.pipeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.pipeline-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pipeline-stat {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-align: center;
+}
+.pipeline-stat-val { font-size: 18px; font-weight: 600; color: #1a1a18; }
+.pipeline-stat-lbl { font-size: 10px; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; }
+
+.pipeline-actions {
+  display: flex;
+  gap: 8px;
+}
+.btn-primary {
+  background: #ff7a59;
+  color: white;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-secondary {
+  background: white;
+  border: 1px solid #e0dcd7;
+  color: #444;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ── KANBAN BOARD ── */
+.kanban {
+  display: flex;
+  gap: 12px;
+  min-width: max-content;
+  align-items: flex-start;
+}
+
+.kanban-col {
+  width: 220px;
+  flex-shrink: 0;
+}
+.kanban-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 8px 8px 0 0;
+  border-bottom: 3px solid;
+  margin-bottom: 1px;
+}
+.col-title { font-size: 12px; font-weight: 600; }
+.col-count {
+  background: #f0ede9;
+  color: #888;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+.col-amount { font-size: 10px; color: #aaa; margin-top: 2px; }
+
+.kanban-cards {
+  background: #edeae5;
+  border-radius: 0 0 8px 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 60px;
+}
+
+/* ── DEAL CARD ── */
+.deal-card {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.deal-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); transform: translateY(-1px); }
+.deal-card.highlighted { border-left: 3px solid #e8583a; }
+.deal-card.overdue { border-left: 3px solid #e8583a; }
+.deal-card.warning { border-left: 3px solid #f5a623; }
+.deal-card.ok { border-left: 3px solid #35b887; }
+
+.card-name { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 4px; }
+.card-sub { font-size: 11px; color: #888; margin-bottom: 6px; }
+.card-amount { font-size: 12px; font-weight: 600; color: #1a1a18; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.card-tag {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.tag-blue { background: #e8f4fd; color: #1a6fa8; }
+.tag-green { background: #e6f7ef; color: #1a7a4a; }
+.tag-amber { background: #fef5e7; color: #a06a00; }
+.tag-red { background: #fef0f0; color: #c0392b; }
+.tag-purple { background: #f3eeff; color: #6a3aa2; }
+.tag-gray { background: #f2f0ed; color: #666; }
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #f0ede9;
+}
+.card-owner {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+}
+.card-task {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: #e8583a;
+}
+.card-task-ok { color: #35b887; }
+.card-date { font-size: 10px; color: #aaa; }
+
+/* ── AUTOMATION PANEL ── */
+.automation-panel {
+  padding: 20px 24px;
+  display: none;
+}
+.automation-panel.visible { display: block; }
+
+.wf-card {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.wf-card:hover { border-color: #e8583a; }
+.wf-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.wf-content { flex: 1; }
+.wf-name { font-size: 13px; font-weight: 600; color: #1a1a18; margin-bottom: 2px; }
+.wf-desc { font-size: 12px; color: #888; margin-bottom: 6px; }
+.wf-trigger {
+  font-size: 11px;
+  background: #f0ede9;
+  color: #555;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.wf-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.wf-on { background: #e6f7ef; color: #1a7a4a; }
+.wf-draft { background: #f2f0ed; color: #888; }
+
+/* ── PROPERTIES PANEL ── */
+.props-panel {
+  padding: 20px 24px;
+  display: none;
+}
+.props-panel.visible { display: block; }
+
+.prop-group {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.prop-group-header {
+  padding: 10px 16px;
+  background: #faf9f7;
+  border-bottom: 1px solid #e8e4df;
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.prop-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid #f4f2ef;
+  gap: 12px;
+}
+.prop-row:last-child { border-bottom: none; }
+.prop-name { font-size: 12px; color: #555; width: 180px; flex-shrink: 0; }
+.prop-type {
+  font-size: 10px;
+  background: #f0ede9;
+  color: #777;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.prop-new { margin-left: auto; font-size: 10px; background: #fff3ef; color: #e8583a; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+.prop-exists { margin-left: auto; font-size: 10px; background: #f2f0ed; color: #888; padding: 2px 7px; border-radius: 4px; }
+
+/* ── DASHBOARD PANEL ── */
+.dashboard-panel {
+  padding: 20px 24px;
+  display: none;
+}
+.dashboard-panel.visible { display: block; }
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.dash-kpi {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  padding: 16px;
+}
+.kpi-val { font-size: 28px; font-weight: 600; color: #1a1a18; line-height: 1; margin-bottom: 4px; }
+.kpi-lbl { font-size: 11px; color: #888; }
+.kpi-change { font-size: 11px; margin-top: 6px; font-weight: 500; }
+.kpi-up { color: #35b887; }
+.kpi-down { color: #e8583a; }
+
+.dash-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.dash-chart {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  padding: 16px;
+}
+.chart-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; }
+.chart-subtitle { font-size: 11px; color: #888; margin-top: 2px; font-weight: 400; }
+
+.funnel-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+.funnel-label { font-size: 11px; color: #555; width: 120px; flex-shrink: 0; }
+.funnel-bar-wrap { flex: 1; background: #f0ede9; border-radius: 4px; height: 20px; overflow: hidden; }
+.funnel-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; }
+.funnel-val { font-size: 10px; font-weight: 600; color: white; }
+.funnel-pct { font-size: 10px; color: #aaa; width: 36px; text-align: right; }
+
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.channel-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.channel-name { font-size: 12px; color: #555; flex: 1; }
+.channel-val { font-size: 12px; font-weight: 600; }
+.channel-bar-wrap { width: 80px; background: #f0ede9; border-radius: 3px; height: 6px; }
+.channel-bar { height: 100%; border-radius: 3px; }
+
+/* ── SECTION HEADERS ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.section-title { font-size: 14px; font-weight: 600; color: #1a1a18; }
+.section-count {
+  background: #f0ede9;
+  color: #888;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  padding: 18px 24px 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+/* ── RECORD VIEW ── */
+.record-panel {
+  padding: 20px 24px;
+  display: none;
+}
+.record-panel.visible { display: block; }
+
+.record-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 16px;
+}
+.record-main {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.record-topbar {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0ede9;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.record-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.record-name { font-size: 16px; font-weight: 600; }
+.record-sub { font-size: 12px; color: #888; }
+.record-status {
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.record-body { padding: 16px 20px; }
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 7px 0;
+  border-bottom: 1px solid #f8f6f4;
+  gap: 12px;
+}
+.field-row:last-child { border-bottom: none; }
+.field-label { font-size: 11px; color: #aaa; width: 140px; flex-shrink: 0; padding-top: 1px; }
+.field-value { font-size: 12px; color: #1a1a18; font-weight: 500; }
+.field-value.muted { color: #888; font-weight: 400; }
+
+.timeline { padding: 16px 20px; }
+.timeline-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.timeline-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  top: 28px;
+  bottom: -4px;
+  width: 1px;
+  background: #e8e4df;
+}
+.timeline-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  position: relative;
+  z-index: 1;
+}
+.timeline-content { flex: 1; padding-top: 4px; }
+.timeline-title { font-size: 12px; font-weight: 600; color: #1a1a18; }
+.timeline-meta { font-size: 11px; color: #aaa; }
+
+.record-sidebar {}
+.sidebar-card {
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.sidebar-card-header {
+  padding: 10px 14px;
+  border-bottom: 1px solid #f0ede9;
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-field {
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f8f6f4;
+  font-size: 12px;
+}
+.sidebar-field:last-child { border-bottom: none; }
+.sfield-label { color: #888; }
+.sfield-value { font-weight: 500; color: #1a1a18; }
+.sfield-check { color: #35b887; font-weight: 700; }
+.sfield-empty { color: #ccc; }
+
+/* ── AUTOMATION FLOW ── */
+.flow-diagram {
+  padding: 20px;
+  background: white;
+  border: 1px solid #e8e4df;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.flow-node {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 20px;
+}
+.flow-node:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 36px;
+  bottom: 0;
+  width: 1px;
+  background: #e0dcd7;
+  border-left: 1px dashed #d0cdc8;
+}
+.flow-bullet {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+  position: relative;
+  z-index: 1;
+}
+.flow-text {}
+.flow-node-title { font-size: 12px; font-weight: 600; color: #1a1a18; margin-bottom: 2px; }
+.flow-node-desc { font-size: 11px; color: #888; }
+
+/* ── UTILITY ── */
+.hidden { display: none !important; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  gap: 4px;
+}
+
+.page-view { display: none; }
+.page-view.active { display: block; }
+</style>
+</head>
+<body>
+
+<div class="hs-chrome">
+
+  <!-- TOP BAR -->
+  <div class="hs-topbar">
+    <div class="hs-logo">
+      <div class="hs-logo-icon">H</div>
+      HubSpot
+    </div>
+    <div class="hs-topbar-nav">
+      <div class="hs-topbar-item active" onclick="switchNav('crm')">CRM</div>
+      <div class="hs-topbar-item" onclick="switchNav('mkt')">Marketing</div>
+      <div class="hs-topbar-item" onclick="switchNav('svc')">Servicio</div>
+      <div class="hs-topbar-item" onclick="switchNav('rep')">Informes</div>
+      <div class="hs-topbar-item" onclick="switchNav('aut')">Automatización</div>
+    </div>
+    <div class="hs-topbar-right">
+      <div style="font-size:12px; color:#888;">Meaning Group <span style="color:#e8583a; font-weight:600;">· Colectivo Aquí y Ahora</span></div>
+      <div class="hs-avatar">NS</div>
+    </div>
+  </div>
+
+  <!-- ICON BAR -->
+  <div class="hs-iconbar">
+    <div class="hs-icon-btn active" onclick="switchIcon('contacts')" title="Contactos">👤</div>
+    <div class="hs-icon-btn" onclick="switchIcon('leads')" title="Leads">🎯</div>
+    <div class="hs-icon-btn" onclick="switchIcon('deals')" title="Negocios">💼</div>
+    <div class="hs-icon-btn" onclick="switchIcon('tasks')" title="Tareas">✅</div>
+    <div class="hs-icon-btn" onclick="switchIcon('reports')" title="Informes">📊</div>
+    <div style="flex:1"></div>
+    <div class="hs-icon-btn" title="Ajustes">⚙️</div>
+  </div>
+
+  <!-- SIDE NAV -->
+  <div class="hs-sidenav">
+    <div class="nav-section-label">Ventas</div>
+    <div class="nav-item" onclick="showView('contacts')">
+      <span class="nav-icon">👤</span> Contactos
+    </div>
+    <div class="nav-item active" onclick="showView('pipelines')">
+      <span class="nav-icon">💼</span> Negocios
+      <span class="nav-badge">24</span>
+    </div>
+    <div class="nav-item" onclick="showView('tasks')">
+      <span class="nav-icon">✅</span> Tareas
+      <span class="nav-badge">7</span>
+    </div>
+
+    <div class="nav-section-label">Procesos</div>
+    <div class="nav-item" onclick="showView('pipelines')">
+      <span class="nav-icon">🎯</span> Pipeline SAC
+    </div>
+    <div class="nav-item" onclick="showView('pipelines')">
+      <span class="nav-icon">🩺</span> Ambulatorio
+    </div>
+    <div class="nav-item" onclick="showView('pipelines')">
+      <span class="nav-icon">🏠</span> Casa CAYA
+    </div>
+
+    <div class="nav-section-label">Automatización</div>
+    <div class="nav-item" onclick="showView('workflows')">
+      <span class="nav-icon">⚡</span> Workflows
+      <span class="nav-badge">11</span>
+    </div>
+    <div class="nav-item" onclick="showView('properties')">
+      <span class="nav-icon">🔧</span> Propiedades
+    </div>
+
+    <div class="nav-section-label">Análisis</div>
+    <div class="nav-item" onclick="showView('dashboard')">
+      <span class="nav-icon">📊</span> Dashboard SAC
+    </div>
+    <div class="nav-item" onclick="showView('dashboard')">
+      <span class="nav-icon">📈</span> Conversión
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="hs-main">
+
+    <!-- ══ PIPELINES VIEW ══ -->
+    <div id="view-pipelines" class="page-view active">
+
+      <div class="page-header">
+        <div>
+          <div class="view-title">Negocios</div>
+          <div class="view-subtitle">Vista de pipeline — Colectivo Aquí y Ahora</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center">
+          <button class="btn-secondary" onclick="showView('properties')">⚙ Propiedades</button>
+          <button class="btn-secondary" onclick="showView('workflows')">⚡ Workflows</button>
+          <button class="btn-primary">+ Nuevo negocio</button>
+        </div>
+      </div>
+
+      <!-- Process tabs -->
+      <div class="process-tabs" style="margin-top:14px;">
+        <div class="ptab active" onclick="switchProcess('sac')">
+          <div class="ptab-dot" style="background:#3b82f6"></div>
+          SAC · Primer contacto
+        </div>
+        <div class="ptab" onclick="switchProcess('amb')">
+          <div class="ptab-dot" style="background:#8b5cf6"></div>
+          Tratamiento Ambulatorio
+        </div>
+        <div class="ptab" onclick="switchProcess('caya')">
+          <div class="ptab-dot" style="background:#e8583a"></div>
+          Casa CAYA · Residencial
+        </div>
+        <div class="ptab" onclick="showView('dashboard')" style="margin-left:auto">
+          📊 Ver dashboard
+        </div>
+      </div>
+
+      <!-- SAC Pipeline -->
+      <div id="proc-sac" class="pipeline-area">
+        <div class="pipeline-header">
+          <div class="pipeline-meta">
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val">857</div>
+              <div class="pipeline-stat-lbl">leads / mes</div>
+            </div>
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val" style="color:#e8583a">11.3%</div>
+              <div class="pipeline-stat-lbl">conversión</div>
+            </div>
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val">$3.1M</div>
+              <div class="pipeline-stat-lbl">en pipeline</div>
+            </div>
+          </div>
+          <div class="pipeline-actions">
+            <button class="btn-secondary">🔍 Filtrar</button>
+            <button class="btn-secondary">↕ Ordenar</button>
+          </div>
+        </div>
+
+        <div class="kanban">
+          <!-- Nuevo contacto -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#94a3b8">
+              <div>
+                <div class="col-title" style="color:#475569">Nuevo contacto</div>
+                <div class="col-amount">6 leads</div>
+              </div>
+              <span class="col-count">6</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card warning" onclick="showView('record')">
+                <div class="card-name">Andrea Moreno</div>
+                <div class="card-sub">Vía: Formulario web</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-blue">WhatsApp</span>
+                  <span class="card-tag tag-amber">Sin contactar</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-task">⚡ Tarea: hoy</div>
+                </div>
+              </div>
+              <div class="deal-card">
+                <div class="card-name">Familia Guerrero</div>
+                <div class="card-sub">Vía: Botón web</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-purple">Para familiar</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-date">hace 1h</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Primer contacto enviado -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#60a5fa">
+              <div>
+                <div class="col-title" style="color:#1d4ed8">Primer contacto</div>
+                <div class="col-amount">14 leads · $4.97M</div>
+              </div>
+              <span class="col-count">14</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Roberto Salcedo</div>
+                <div class="card-sub">Respondió hoy 10:22am</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-blue">Efrén M.</span>
+                  <span class="card-tag tag-green">Adicciones</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-task card-task-ok">✓ Activo</div>
+                </div>
+              </div>
+              <div class="deal-card warning">
+                <div class="card-name">Luis Pedraza</div>
+                <div class="card-sub">Sin respuesta · 3 días</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-amber">D+3 · seguir</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-task">⚡ Seguimiento D+3</div>
+                </div>
+              </div>
+              <div class="deal-card warning">
+                <div class="card-name">Claudia Hernández</div>
+                <div class="card-sub">Sin respuesta · 5 días</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-red">D+5 · último</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-task">⚡ Último intento</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- En conversación -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#a78bfa">
+              <div>
+                <div class="col-title" style="color:#6d28d9">En conversación</div>
+                <div class="col-amount">9 leads · $3.2M</div>
+              </div>
+              <span class="col-count">9</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card highlighted">
+                <div class="card-name">Marcela Ríos</div>
+                <div class="card-sub">Preguntó por costos</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-purple">Personalidad</span>
+                  <span class="card-tag tag-green">Interesada</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-task">📋 Portafolio enviado</div>
+                </div>
+              </div>
+              <div class="deal-card">
+                <div class="card-name">Juan Forero</div>
+                <div class="card-sub">Evalúa opciones</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-amber">Ambulatorio</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#6366f1">CM</div>
+                  <div class="card-date">ayer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Valoración agendada -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#34d399">
+              <div>
+                <div class="col-title" style="color:#065f46">Valoración agendada</div>
+                <div class="col-amount">7 negocios · $2.5M</div>
+              </div>
+              <span class="col-count">7</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Sandra Mejía</div>
+                <div class="card-sub">Mañana 10:00am · Laura</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-green">Pago ✓</span>
+                  <span class="card-tag tag-blue">Presencial</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#10b981">JS</div>
+                  <div class="card-task card-task-ok">✓ Listo</div>
+                </div>
+              </div>
+              <div class="deal-card warning">
+                <div class="card-name">Familia Castillo</div>
+                <div class="card-sub">Hoy 3:00pm · Ernesto</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-amber">Pago pendiente</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#10b981">JS</div>
+                  <div class="card-task">⚡ Confirmar pago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Calificado -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#f59e0b">
+              <div>
+                <div class="col-title" style="color:#92400e">Calificado</div>
+                <div class="col-amount">5 negocios · $24.5M</div>
+              </div>
+              <span class="col-count">5</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card highlighted" onclick="showView('record')">
+                <div class="card-name">Carlos Ávila</div>
+                <div class="card-sub">Valoración: ayer · Ernesto</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-purple">→ Ambulatorio</span>
+                </div>
+                <div class="card-amount">$5.8M</div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#10b981">JS</div>
+                  <div class="card-task">⚡ Enviar propuesta</div>
+                </div>
+              </div>
+              <div class="deal-card" onclick="showView('record')">
+                <div class="card-name">Familia Rincón</div>
+                <div class="card-sub">Valoración: hoy · María</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-red">→ Casa CAYA</span>
+                </div>
+                <div class="card-amount">$72M</div>
+                <div class="card-footer">
+                  <div class="card-owner" style="background:#e8583a">DR</div>
+                  <div class="card-task">⚡ Notificar Diana</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descalificado -->
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#d1d5db">
+              <div>
+                <div class="col-title" style="color:#6b7280">Descalificado</div>
+                <div class="col-amount">Esta semana: 31</div>
+              </div>
+              <span class="col-count">31</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card" style="opacity:0.7">
+                <div class="card-name">Pedro González</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-gray">Motivo: costo</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-date">hace 2 días</div>
+                </div>
+              </div>
+              <div class="deal-card" style="opacity:0.7">
+                <div class="card-name">Ana Torres</div>
+                <div class="card-tags">
+                  <span class="card-tag tag-gray">Sin respuesta</span>
+                </div>
+                <div class="card-footer">
+                  <div class="card-date">hace 3 días</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AMB Pipeline -->
+      <div id="proc-amb" class="pipeline-area hidden">
+        <div class="pipeline-header">
+          <div class="pipeline-meta">
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val">18</div>
+              <div class="pipeline-stat-lbl">en tratamiento</div>
+            </div>
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val" style="color:#8b5cf6">$87M</div>
+              <div class="pipeline-stat-lbl">valor activo</div>
+            </div>
+          </div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#c4b5fd">
+              <div><div class="col-title" style="color:#6d28d9">Valoración realizada</div><div class="col-amount">3 negocios</div></div>
+              <span class="col-count">3</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Carlos Ávila</div>
+                <div class="card-sub">Terapeuta sugerido: María B.</div>
+                <div class="card-tags"><span class="card-tag tag-green">Adicciones</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#10b981">JS</div><div class="card-task">⚡ Enviar propuesta</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#a78bfa">
+              <div><div class="col-title" style="color:#5b21b6">Propuesta enviada</div><div class="col-amount">5 negocios</div></div>
+              <span class="col-count">5</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card warning">
+                <div class="card-name">Pilar Suárez</div>
+                <div class="card-sub">Propuesta enviada · 4 días sin respuesta</div>
+                <div class="card-tags"><span class="card-tag tag-amber">Indecisa</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#10b981">JS</div><div class="card-task">⚡ Seguimiento Laura</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#7c3aed">
+              <div><div class="col-title" style="color:#4c1d95">Documentos</div><div class="col-amount">2 negocios</div></div>
+              <span class="col-count">2</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card warning">
+                <div class="card-name">David Ortega</div>
+                <div class="card-sub">Falta: consentimiento informado</div>
+                <div class="card-tags"><span class="card-tag tag-amber">1 doc. pendiente</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#10b981">JS</div><div class="card-task">⚡ Recordar firma</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#10b981">
+              <div><div class="col-title" style="color:#065f46">Primera sesión</div><div class="col-amount">4 negocios</div></div>
+              <span class="col-count">4</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Valeria Moreno</div>
+                <div class="card-sub">Primera cita: mañana · María B.</div>
+                <div class="card-tags"><span class="card-tag tag-green">Pago ✓</span><span class="card-tag tag-green">Docs ✓</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#10b981">JS</div><div class="card-task card-task-ok">✓ Listo</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#7c3aed">
+              <div><div class="col-title" style="color:#4c1d95">En tratamiento</div><div class="col-amount">18 activos</div></div>
+              <span class="col-count">18</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Ana Gómez</div>
+                <div class="card-sub">Sesión 5 de 15 · Fase 1</div>
+                <div class="card-tags"><span class="card-tag tag-amber">⚡ NPS hoy</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#8b5cf6">MG</div><div class="card-task">📋 Encuesta sesión 5</div></div>
+              </div>
+              <div class="deal-card">
+                <div class="card-name">Tomás Vargas</div>
+                <div class="card-sub">Sesión 11 de 15 · Fase 3</div>
+                <div class="card-tags"><span class="card-tag tag-green">En sentido de vida</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#8b5cf6">EV</div><div class="card-date">sesión: miér.</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#34d399">
+              <div><div class="col-title" style="color:#065f46">Completado</div><div class="col-amount">Este mes: 6</div></div>
+              <span class="col-count">6</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok" style="opacity:0.85">
+                <div class="card-name">Ricardo Castro</div>
+                <div class="card-sub">15/15 sesiones · Informe entregado</div>
+                <div class="card-tags"><span class="card-tag tag-green">NPS: 9/10</span></div>
+                <div class="card-footer"><div class="card-date">hace 5 días</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAYA Pipeline -->
+      <div id="proc-caya" class="pipeline-area hidden">
+        <div class="pipeline-header">
+          <div class="pipeline-meta">
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val">8</div>
+              <div class="pipeline-stat-lbl">en casa</div>
+            </div>
+            <div class="pipeline-stat">
+              <div class="pipeline-stat-val" style="color:#e8583a">$576M</div>
+              <div class="pipeline-stat-lbl">valor activo</div>
+            </div>
+          </div>
+        </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#fca5a5">
+              <div><div class="col-title" style="color:#991b1b">Doble valoración</div><div class="col-amount">2 negocios</div></div>
+              <span class="col-count">2</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card warning">
+                <div class="card-name">Familia Rincón</div>
+                <div class="card-sub">Psicológica ✓ · Psiquiátrica ⏳</div>
+                <div class="card-tags"><span class="card-tag tag-amber">Pendiente 1</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#e8583a">DR</div><div class="card-task">⚡ Agendar psiquiatría</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#f87171">
+              <div><div class="col-title" style="color:#7f1d1d">Encuadre Diana</div><div class="col-amount">1 negocio</div></div>
+              <span class="col-count">1</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Diego Llanos</div>
+                <div class="card-sub">Reunión hoy 4pm</div>
+                <div class="card-tags"><span class="card-tag tag-green">Familia confirmada</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#e8583a">DR</div><div class="card-task card-task-ok">✓ Encuadre hoy</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#ef4444">
+              <div><div class="col-title" style="color:#7f1d1d">Docs + Pago</div><div class="col-amount">1 negocio</div></div>
+              <span class="col-count">1</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card warning">
+                <div class="card-name">Sebastián Quiroga</div>
+                <div class="card-sub">Pago 50% recibido</div>
+                <div class="card-tags"><span class="card-tag tag-amber">Falta 50%</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#e8583a">DR</div><div class="card-task">⚡ Confirmar saldo</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#dc2626">
+              <div><div class="col-title" style="color:#7f1d1d">En casa · Sem. 1–4</div><div class="col-amount">4 residentes</div></div>
+              <span class="col-count">4</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Andrés Pacheco</div>
+                <div class="card-sub">Semana 3 · Casa Sentido</div>
+                <div class="card-tags"><span class="card-tag tag-blue">Aislamiento: fin</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#f59e0b">VL</div><div class="card-task card-task-ok">✓ Reporte enviado</div></div>
+              </div>
+              <div class="deal-card">
+                <div class="card-name">Miguel Torres</div>
+                <div class="card-sub">Semana 1 · Casa Existencia</div>
+                <div class="card-tags"><span class="card-tag tag-gray">Sin comunicación</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#f59e0b">VL</div><div class="card-task">⚡ Reporte en 3 días</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#b91c1c">
+              <div><div class="col-title" style="color:#7f1d1d">Sem. 5+ · Terapia</div><div class="col-amount">3 residentes</div></div>
+              <span class="col-count">3</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok">
+                <div class="card-name">Felipe Arenas</div>
+                <div class="card-sub">Semana 8 · Fase personalidad</div>
+                <div class="card-tags"><span class="card-tag tag-green">Form. caso ✓</span></div>
+                <div class="card-footer"><div class="card-owner" style="background:#f59e0b">VL</div><div class="card-date">Plan soporte: sem. 12</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header" style="border-bottom-color:#34d399">
+              <div><div class="col-title" style="color:#065f46">Egresados</div><div class="col-amount">Este mes: 2</div></div>
+              <span class="col-count">2</span>
+            </div>
+            <div class="kanban-cards">
+              <div class="deal-card ok" style="opacity:0.85">
+                <div class="card-name">Juan Ramírez</div>
+                <div class="card-sub">12 semanas completadas</div>
+                <div class="card-tags"><span class="card-tag tag-green">IAA ✓</span><span class="card-tag tag-green">Plan soporte ✓</span></div>
+                <div class="card-footer"><div class="card-date">egresó hace 10 días</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ WORKFLOWS VIEW ══ -->
+    <div id="view-workflows" class="page-view">
+      <div class="page-header" style="margin-bottom:16px">
+        <div>
+          <div class="view-title">Automatizaciones</div>
+          <div class="view-subtitle">Workflows activos — Colectivo Aquí y Ahora</div>
+        </div>
+        <button class="btn-primary">+ Nuevo workflow</button>
+      </div>
+
+      <div class="automation-panel visible">
+        <div class="section-header">
+          <div class="section-title">SAC · Primer contacto</div>
+          <div class="section-count">5 workflows</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#eff6ff">⚡</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-01 · Asignación y notificación de nuevo lead</div>
+            <div class="wf-desc">Cuando se crea un Lead nuevo, notifica a Camila y crea tarea con fecha límite para el mismo día.</div>
+            <div class="wf-trigger">Trigger: Lead creado</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fefce8">⏰</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-02 · Seguimiento automático D+2</div>
+            <div class="wf-desc">Si el lead lleva 2 días en "Primer contacto enviado" sin actividad, crea tarea a Camila: "Hacer seguimiento a [Nombre]".</div>
+            <div class="wf-trigger">Trigger: Lead sin actividad · 2 días</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fef2f2">🔔</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-03 · Seguimiento D+5 · Último intento</div>
+            <div class="wf-desc">5 días sin respuesta: tarea de último intento. Si pasan 3 días más sin respuesta, mueve automáticamente a Descalificado con motivo "Sin respuesta".</div>
+            <div class="wf-trigger">Trigger: Lead sin actividad · 5 días</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#f0fdf4">✅</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-04 · Recordatorio de pago de valoración</div>
+            <div class="wf-desc">Al mover lead a "Valoración agendada": correo automático al paciente + tarea a Camila para confirmar pago al día siguiente.</div>
+            <div class="wf-trigger">Trigger: Etapa → Valoración agendada</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#faf5ff">🔀</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-05 · Creación automática de Negocio al calificar</div>
+            <div class="wf-desc">Cuando el Lead pasa a "Calificado" y se selecciona Tipo de servicio, crea un Negocio automáticamente en el pipeline correspondiente (Ambulatorio o Residencial) y lo asigna a Jessica.</div>
+            <div class="wf-trigger">Trigger: Lead → Calificado + Tipo de servicio seleccionado</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="section-header" style="margin-top:24px">
+          <div class="section-title">Tratamiento Ambulatorio</div>
+          <div class="section-count">6 workflows</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#faf5ff">📨</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-06 · Notificación a Jessica cuando llega valoración</div>
+            <div class="wf-desc">Al entrar a "Valoración realizada": notificación interna a Jessica con datos del paciente, tratamiento recomendado y terapeuta sugerido. Tarea: contactar en máx. 24h.</div>
+            <div class="wf-trigger">Trigger: Negocio → Valoración realizada</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fefce8">📋</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-07 · Recordatorio de documentos sin firmar</div>
+            <div class="wf-desc">Si el negocio lleva 3 días en "Documentos enviados" sin avanzar, crea tarea a Jessica: "Hacer seguimiento de firma de documentos".</div>
+            <div class="wf-trigger">Trigger: Negocio sin avance · 3 días</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fef2f2">🎯</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-08 · Seguimiento a paciente indeciso post-valoración</div>
+            <div class="wf-desc">Si el negocio lleva 4 días en "Propuesta enviada" sin avanzar, crea tarea a Jessica: "Llamar a [Nombre], paciente indeciso desde valoración del [fecha]".</div>
+            <div class="wf-trigger">Trigger: Propuesta enviada · 4 días sin avance</div>
+          </div>
+          <div class="wf-status wf-on">● Activo</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#f0fdf4">⭐</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-09 · Encuesta NPS automática · Sesión 5</div>
+            <div class="wf-desc">Cuando la propiedad "Sesiones completadas" = 5, envía correo automático con encuesta de satisfacción. Elimina el proceso manual de Carlos con MediLink + WhatsApp.</div>
+            <div class="wf-trigger">Trigger: Sesiones completadas = 5</div>
+          </div>
+          <div class="wf-status wf-draft">○ Borrador</div>
+        </div>
+
+        <div class="section-header" style="margin-top:24px">
+          <div class="section-title">Casa CAYA · Residencial</div>
+          <div class="section-count">6 workflows</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fff1f2">🏠</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-13 · Notificación y tarea a Valeria al ingreso</div>
+            <div class="wf-desc">Al ingresar a "Ingreso realizado": tarea a Valeria — "Presentarte a la familia de [Nombre] en las próximas 48h y enviar primer reporte a los 7 días".</div>
+            <div class="wf-trigger">Trigger: Negocio → Ingreso realizado</div>
+          </div>
+          <div class="wf-status wf-draft">○ Borrador</div>
+        </div>
+
+        <div class="wf-card">
+          <div class="wf-icon" style="background:#fff1f2">📅</div>
+          <div class="wf-content">
+            <div class="wf-name">WF-16 · Alerta semana 12 — plan soporte</div>
+            <div class="wf-desc">Fecha de ingreso + 77 días: tarea a Diana y Mauricio — "Coordinar reunión de plan soporte con red de apoyo de [Nombre]".</div>
+            <div class="wf-trigger">Trigger: Fecha ingreso + 77 días</div>
+          </div>
+          <div class="wf-status wf-draft">○ Borrador</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ PROPERTIES VIEW ══ -->
+    <div id="view-properties" class="page-view">
+      <div class="page-header" style="margin-bottom:16px">
+        <div>
+          <div class="view-title">Propiedades</div>
+          <div class="view-subtitle">Propiedades personalizadas por objeto — Colectivo Aquí y Ahora</div>
+        </div>
+        <button class="btn-primary">+ Nueva propiedad</button>
+      </div>
+
+      <div class="props-panel visible">
+        <div class="prop-group">
+          <div class="prop-group-header">👤 Objeto Contacto — Propiedades nuevas</div>
+          <div class="prop-row"><span class="prop-name">Canal de contacto</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Origen / Motivación</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Busca servicio para</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Patología principal</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Perfil VIP / Confidencial</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Motivo de no conversión</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Unidad de negocio MG</span><span class="prop-type">dropdown</span><span class="prop-exists">EXISTENTE</span></div>
+        </div>
+
+        <div class="prop-group">
+          <div class="prop-group-header">💼 Objeto Negocio — Pipeline Ambulatorio</div>
+          <div class="prop-row"><span class="prop-name">Terapeuta asignado</span><span class="prop-type">text</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Modalidad</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Tipo de paquete</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Sesiones completadas</span><span class="prop-type">number</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Contrato terapéutico firmado</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Consentimiento informado firmado</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Contrato económico firmado</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Informe diagnóstico (sesión 6)</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Informe de cierre (sesión 15)</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+        </div>
+
+        <div class="prop-group">
+          <div class="prop-group-header">🏠 Objeto Negocio — Pipeline Casa CAYA</div>
+          <div class="prop-row"><span class="prop-name">Val. psicológica completada</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Val. psiquiátrica completada</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Ambas valoraciones coinciden</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Casa asignada</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Fecha de ingreso</span><span class="prop-type">date</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Semana actual del proceso</span><span class="prop-type">number</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Tipo de ingreso</span><span class="prop-type">dropdown</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Reunión semana 5 realizada</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Plan soporte sem. 12 realizado</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+          <div class="prop-row"><span class="prop-name">Conectado a grupos post-egreso</span><span class="prop-type">checkbox</span><span class="prop-new">NUEVA</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DASHBOARD VIEW ══ -->
+    <div id="view-dashboard" class="page-view">
+      <div class="page-header" style="margin-bottom:16px">
+        <div>
+          <div class="view-title">Dashboard SAC · Conversión</div>
+          <div class="view-subtitle">Mayo–Junio 2026 · Generado automáticamente desde HubSpot</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary">📥 Exportar</button>
+          <button class="btn-secondary" onclick="showView('pipelines')">← Volver al pipeline</button>
+        </div>
+      </div>
+
+      <div class="dashboard-panel visible">
+        <div class="dash-grid">
+          <div class="dash-kpi">
+            <div class="kpi-val">857</div>
+            <div class="kpi-lbl">Leads este mes</div>
+            <div class="kpi-change kpi-up">↑ 12% vs. mes anterior</div>
+          </div>
+          <div class="dash-kpi">
+            <div class="kpi-val" style="color:#e8583a">11.3%</div>
+            <div class="kpi-lbl">Conversión → valoración</div>
+            <div class="kpi-change kpi-down">↓ 0.4% vs. mes anterior</div>
+          </div>
+          <div class="dash-kpi">
+            <div class="kpi-val" style="color:#8b5cf6">48%</div>
+            <div class="kpi-lbl">Valoración → tratamiento</div>
+            <div class="kpi-change kpi-up">↑ 3% vs. mes anterior</div>
+          </div>
+          <div class="dash-kpi">
+            <div class="kpi-val" style="color:#35b887">18</div>
+            <div class="kpi-lbl">Pacientes activos amb.</div>
+            <div class="kpi-change kpi-up">↑ 4 nuevos este mes</div>
+          </div>
+        </div>
+
+        <div class="dash-charts">
+          <div class="dash-chart">
+            <div class="chart-title">Funnel de conversión<div class="chart-subtitle">Del primer contacto al tratamiento activo</div></div>
+            <div class="funnel-row">
+              <div class="funnel-label">Leads totales</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%; background:#3b82f6"><span class="funnel-val">857</span></div></div>
+              <div class="funnel-pct">100%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="funnel-label">Primer contacto</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:72%; background:#6366f1"><span class="funnel-val">617</span></div></div>
+              <div class="funnel-pct">72%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="funnel-label">En conversación</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:32%; background:#8b5cf6"><span class="funnel-val">275</span></div></div>
+              <div class="funnel-pct">32%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="funnel-label">Valoración agendada</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:13%; background:#a855f7"><span class="funnel-val">97</span></div></div>
+              <div class="funnel-pct">11.3%</div>
+            </div>
+            <div class="funnel-row">
+              <div class="funnel-label">Inició tratamiento</div>
+              <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:6%; background:#35b887"><span class="funnel-val">46</span></div></div>
+              <div class="funnel-pct">5.4%</div>
+            </div>
+          </div>
+
+          <div class="dash-chart">
+            <div class="chart-title">Canal de entrada<div class="chart-subtitle">Origen técnico del contacto</div></div>
+            <div class="channel-row">
+              <div class="channel-dot" style="background:#3b82f6"></div>
+              <div class="channel-name">Botón web / WhatsApp</div>
+              <div class="channel-val">557</div>
+              <div class="channel-bar-wrap"><div class="channel-bar" style="width:65%; background:#3b82f6"></div></div>
+            </div>
+            <div class="channel-row">
+              <div class="channel-dot" style="background:#8b5cf6"></div>
+              <div class="channel-name">Formulario web</div>
+              <div class="channel-val">257</div>
+              <div class="channel-bar-wrap"><div class="channel-bar" style="width:30%; background:#8b5cf6"></div></div>
+            </div>
+            <div class="channel-row">
+              <div class="channel-dot" style="background:#f59e0b"></div>
+              <div class="channel-name">Llamada directa</div>
+              <div class="channel-val">34</div>
+              <div class="channel-bar-wrap"><div class="channel-bar" style="width:4%; background:#f59e0b"></div></div>
+            </div>
+            <div class="channel-row">
+              <div class="channel-dot" style="background:#6b7280"></div>
+              <div class="channel-name">Otros</div>
+              <div class="channel-val">9</div>
+              <div class="channel-bar-wrap"><div class="channel-bar" style="width:1%; background:#6b7280"></div></div>
+            </div>
+
+            <div style="margin-top:20px;">
+              <div class="chart-title" style="font-size:12px; margin-bottom:10px;">Motivos de no conversión</div>
+              <div class="channel-row"><div class="channel-dot" style="background:#e8583a"></div><div class="channel-name">Costo</div><div class="channel-val" style="color:#e8583a">58%</div></div>
+              <div class="channel-row"><div class="channel-dot" style="background:#94a3b8"></div><div class="channel-name">Sin respuesta</div><div class="channel-val">28%</div></div>
+              <div class="channel-row"><div class="channel-dot" style="background:#f59e0b"></div><div class="channel-name">Decidió no continuar</div><div class="channel-val">10%</div></div>
+              <div class="channel-row"><div class="channel-dot" style="background:#6b7280"></div><div class="channel-name">No apto / Derivado</div><div class="channel-val">4%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ RECORD VIEW ══ -->
+    <div id="view-record" class="page-view">
+      <div class="page-header" style="margin-bottom:16px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <button class="btn-secondary" onclick="showView('pipelines')">← Negocios</button>
+          <span style="color:#888; font-size:12px;">/ Carlos Ávila</span>
+        </div>
+      </div>
+
+      <div class="record-panel visible">
+        <div class="record-grid">
+          <div>
+            <div class="record-main">
+              <div class="record-topbar">
+                <div class="record-avatar" style="background:#7c3aed">CA</div>
+                <div>
+                  <div class="record-name">Carlos Ávila</div>
+                  <div class="record-sub">Negocio · Pipeline Ambulatorio · $5.800.000</div>
+                </div>
+                <div class="record-status" style="background:#fff3ef; color:#e8583a">⚡ Propuesta pendiente</div>
+              </div>
+              <div class="record-body">
+                <div class="field-row"><span class="field-label">Etapa actual</span><span class="field-value">Valoración realizada</span></div>
+                <div class="field-row"><span class="field-label">Terapeuta asignado</span><span class="field-value">María Bradford</span></div>
+                <div class="field-row"><span class="field-label">Patología principal</span><span class="field-value"><span class="card-tag tag-green">Adicciones</span></span></div>
+                <div class="field-row"><span class="field-label">Modalidad</span><span class="field-value">Presencial</span></div>
+                <div class="field-row"><span class="field-label">Tipo de paquete</span><span class="field-value muted">Sin definir</span></div>
+                <div class="field-row"><span class="field-label">Canal de contacto</span><span class="field-value">Formulario web</span></div>
+                <div class="field-row"><span class="field-label">Origen / Motivación</span><span class="field-value">Efrén Martínez</span></div>
+                <div class="field-row"><span class="field-label">Sesiones completadas</span><span class="field-value muted">0</span></div>
+              </div>
+            </div>
+
+            <div class="record-main" style="margin-top:12px">
+              <div class="record-topbar" style="font-size:13px; font-weight:600; color:#444;">
+                Actividad y notas
+              </div>
+              <div class="timeline" style="padding:16px 20px">
+                <div class="timeline-item">
+                  <div class="timeline-dot" style="background:#fff3ef; border:1px solid #fca5a5">⚡</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Tarea: Enviar propuesta económica</div>
+                    <div class="timeline-meta">Asignada a Jessica · Vence hoy · Generada por WF-06</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot" style="background:#f0fdf4; border:1px solid #86efac">✓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Valoración realizada · Ernesto Rodríguez</div>
+                    <div class="timeline-meta">Ayer, 11:30am · Resultado: Ambulatorio · Terapeuta sugerido: María B.</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot" style="background:#eff6ff; border:1px solid #93c5fd">✓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Valoración agendada y pago confirmado</div>
+                    <div class="timeline-meta">Hace 3 días · $355.000 recibido · Gestionado por Camila</div>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot" style="background:#f5f3ff; border:1px solid #c4b5fd">✓</div>
+                  <div class="timeline-content">
+                    <div class="timeline-title">Lead calificado · Canal: Formulario web</div>
+                    <div class="timeline-meta">Hace 5 días · Motivación: Efrén Martínez</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="record-sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">Documentos requeridos</div>
+              <div class="sidebar-field"><span class="sfield-label">Contrato terapéutico</span><span class="sfield-empty">○ Pendiente</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Consentimiento informado</span><span class="sfield-empty">○ Pendiente</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Contrato económico</span><span class="sfield-empty">○ Pendiente</span></div>
+            </div>
+
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">Propietarios</div>
+              <div class="sidebar-field"><span class="sfield-label">SAC · Primer contacto</span><span class="sfield-value">Camila</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Post-valoración</span><span class="sfield-value">Jessica</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Terapeuta asignado</span><span class="sfield-value">María B.</span></div>
+            </div>
+
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">Negocio</div>
+              <div class="sidebar-field"><span class="sfield-label">Pipeline</span><span class="sfield-value">Ambulatorio</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Valor</span><span class="sfield-value">$5.800.000</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Programa</span><span class="sfield-value">Adicciones</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Tipo de pago</span><span class="sfield-empty">Sin definir</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Creado el</span><span class="sfield-value">28 may 2026</span></div>
+            </div>
+
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">Contacto asociado</div>
+              <div class="sidebar-field"><span class="sfield-label">Nombre</span><span class="sfield-value" style="color:#3b82f6; cursor:pointer">Carlos Ávila</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Correo</span><span class="sfield-value" style="font-size:11px">c.avila@gmail.com</span></div>
+              <div class="sidebar-field"><span class="sfield-label">Teléfono</span><span class="sfield-value">+57 310 555 0192</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showView(view) {
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const map = {
+    pipelines: 1, workflows: 6, properties: 7, dashboard: 8, record: 1
+  };
+}
+
+function switchProcess(proc) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  event.target.closest('.ptab').classList.add('active');
+  document.getElementById('proc-sac').classList.add('hidden');
+  document.getElementById('proc-amb').classList.add('hidden');
+  document.getElementById('proc-caya').classList.add('hidden');
+  document.getElementById('proc-' + proc).classList.remove('hidden');
+}
+
+function switchNav(section) {
+  document.querySelectorAll('.hs-topbar-item').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function switchIcon(icon) {
+  document.querySelectorAll('.hs-icon-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
