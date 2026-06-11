@@ -145,7 +145,12 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
     <div class="nav-section">Automatizaciones</div>
     <div class="nav-item" onclick="showPage('workflows',this)">
       <div class="nav-dot" style="background:#f59e0b"></div>
-      Todos los workflows (17)
+      Workflows priorizados (22)
+    </div>
+    <div class="nav-section">Reportería</div>
+    <div class="nav-item" onclick="showPage('informes',this)">
+      <div class="nav-dot" style="background:#0ea5e9"></div>
+      Informes y dashboards
     </div>
     <div class="nav-section">Datos</div>
     <div class="nav-item" onclick="showPage('props',this)">
@@ -208,7 +213,7 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
         </div>
 
         <div class="alert alert-blue">
-          <strong>Principio fundamental:</strong> Los terapeutas, valoradores y psicólogos <strong>no tienen usuario en HubSpot</strong>. SAC (Camila, Mabel, Jessica) y Diana Ramírez son quienes mueven los pipelines. Los clínicos informan y SAC registra.
+          <strong>Principio fundamental:</strong> Los terapeutas, valoradores y psicólogos <strong>no tienen usuario en HubSpot</strong>. SAC (Camila, Mabel, Jessica) y Diana Ramírez son quienes mueven los pipelines. Los clínicos informan y SAC registra. Los líderes de área sí tienen usuario — Carlos en SAC y Ernesto en Tratamiento — para supervisión, reportes y visibilidad: el principio aplica a la operación clínica, no a la dirección de las áreas.
         </div>
 
         <div class="alert alert-amber">
@@ -267,11 +272,36 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
             <div class="user-access">Dashboards · Reportes · Vista completa de pipelines SAC y Ambulatorio</div>
             <div style="margin-top:8px"><span class="chip chip-new">Fase 1</span></div>
           </div>
+          <div class="user-card">
+            <div class="user-avatar" style="background:#0ea5e9">ER</div>
+            <div class="user-name">Ernesto Rodríguez</div>
+            <div class="user-role">Líder de Tratamiento</div>
+            <div class="user-access">Dashboards de tratamiento · Vista pipeline Ambulatorio · Reportes — supervisión y visibilidad, no registro operativo</div>
+            <div style="margin-top:8px"><span class="chip chip-new">Fase 2</span></div>
+          </div>
+        </div>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">Resumen de licencias — insumo para la negociación con HubSpot</div>
+        <div class="prop-table" style="display:block;overflow-x:auto">
+          <table class="prop-table" style="min-width:600px">
+            <tr><th>Fase</th><th>Área / proceso</th><th>Usuarios con licencia</th><th>Cant.</th></tr>
+            <tr><td>Fase 1</td><td>SAC + Marketing</td><td>Camila · Mabel · Jessica · Carlos León · Mariale (ya activa)</td><td><strong>5</strong></td></tr>
+            <tr><td>Fase 1</td><td>Consultoría (durante la implementación)</td><td>Nataly · Aura</td><td><strong>2</strong></td></tr>
+            <tr><td>Fase 2</td><td>Tratamiento</td><td>Ernesto Rodríguez — líder del área</td><td><strong>1</strong></td></tr>
+            <tr><td>Fase 3</td><td>Casa CAYA</td><td>Diana Ramírez</td><td><strong>1</strong></td></tr>
+            <tr><td>Fase 4</td><td>Prevención (B2B colegios y empresas)</td><td>3 personas del equipo — nombres por confirmar con el área</td><td><strong>3</strong></td></tr>
+            <tr><td>Fase 5</td><td>Terapia a un Click</td><td>1 responsable del producto</td><td><strong>1</strong></td></tr>
+            <tr><td colspan="3" style="text-align:right"><strong>Total licencias core para negociar</strong></td><td><strong>13</strong></td></tr>
+          </table>
         </div>
 
         <div class="gap"></div>
         <div class="alert alert-blue">
-          <strong>No tienen usuario en Fase 1:</strong> Ernesto Rodríguez, Laura, María Bradford, Mauricio Murcia, terapeutas, Valeria, Ruxita, Juan Carlos (solo dashboards de consulta si el plan lo permite), Toño.
+          <strong>Solo visualización (sin licencia core, según lo permita el plan):</strong> Juan Carlos Borrás y Toño — dashboards gerenciales de consulta. Valeria recibe la coordinación de sus tareas a través de Diana, sin usuario propio.
+        </div>
+        <div class="alert alert-amber">
+          <strong>Sin acceso al CRM:</strong> terapeutas, valoradores (Laura, María Bradford), Mauricio Murcia, María Cristina y Ruxita. Los clínicos informan, SAC y Diana registran. Este resumen se entrega a Juan Carlos y Toño como base para iniciar la negociación de licencias con HubSpot — incluye los tres procesos del alcance.
         </div>
       </div>
     </div>
@@ -337,6 +367,29 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
         <div class="alert alert-amber">
           Actualizar la automatización de primer/última fuente para incluir todos los dominios activos. Crear UTMs estándar para todas las iniciativas mensuales de lead magnets. Definir cómo manejar el tráfico de Efrén (que no usa UTMs) — probablemente a través de una propiedad "Mencionó a Efrén" que llena Camila en el primer contacto.
         </div>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">Cierre del ciclo — atribución de resultados (lo que hoy no existe)</div>
+        <div class="alert alert-green">
+          <strong>El problema central de marketing hoy:</strong> Mariale genera leads pero no sabe si califican, si compran o dónde se caen — en sus palabras, "opera a ciegas". La solución no es un módulo aparte: al conservarse la fuente original del contacto cuando WF-05 crea el negocio, por primera vez cada venta queda conectada a la iniciativa que la generó. El resultado se ve en el dashboard de marketing (ver sección <strong>Informes y dashboards</strong>): conversión completa por iniciativa, de lead a tratamiento.
+        </div>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">Configuraciones de marketing comprometidas</div>
+        <table class="prop-table">
+          <tr><th>Configuración</th><th>Qué resuelve</th><th>Fase</th></tr>
+          <tr><td><strong>M-01 · Gestión de contactos de marketing</strong></td><td>Al cerrar cada campaña, los contactos inscritos vuelven automáticamente a estado "no marketing". Hoy Mariale lo hace a mano por miedo a la sobrefacturación — esto controla el costo de la licencia sin trabajo manual.</td><td>Fase 1</td></tr>
+          <tr><td><strong>M-03 · Actualización de marcaje de fuentes</strong></td><td>Extender los workflows de primera/última fuente de Triario para cubrir dominios y formularios nuevos (TAC, colegios, agendamiento, ManyChat). Sin esto, la atribución se rompe con cada lanzamiento.</td><td>Fase 1</td></tr>
+          <tr><td><strong>Integración ManyChat → HubSpot</strong></td><td>Auditar la captura de leads desde Instagram (descargables vía ManyChat) para que entren con marcaje de fuente correcto y se activen/desactiven como contactos de marketing.</td><td>Fase 1</td></tr>
+          <tr><td><strong>M-02 · Lead scoring Prevención B2B</strong></td><td>Puntuación por tamaño de institución (+200 personas = hot lead), cargo del contacto e interacción con contenido. Quedó pendiente de Triario y Mariale lo pidió explícitamente en el cuestionario de auditoría.</td><td>Fase 4</td></tr>
+          <tr><td><strong>Plantillas de correo y nutrición por unidad</strong></td><td>Extender la secuencia de Colectivo con contexto por tipo de consulta y construir las secuencias de lead magnets por unidad de negocio.</td><td>Fase 1–2</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">Redes sociales — validación técnica</div>
+        <div class="alert alert-amber">
+          Mariale pidió evaluar la conexión de redes sociales (hoy en Metricool) para unificar la reportería. Se hace una <strong>validación técnica en Fase 1</strong>: si el plan contratado permite conectar las cuentas de varias marcas dentro del mismo portal, se configura; si la licencia no lo permite, queda documentado como limitación con su alternativa. No es un compromiso cerrado — es una validación con respuesta definida.
+        </div>
       </div>
     </div>
 
@@ -345,7 +398,7 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
       <div class="section">
         <div class="section-eyebrow">Etapa 2 · Objeto Lead · Responsable: Camila, Mabel, Jessica</div>
         <div class="section-title">Pipeline SAC · Primer contacto → valoración agendada</div>
-        <div class="section-sub">El objetivo de este pipeline es uno: convertir un contacto en una valoración agendada y pagada. La tasa actual es 11.3% — el seguimiento automatizado debe subirla.</div>
+        <div class="section-sub">El objetivo de este pipeline es uno: convertir un contacto en una valoración agendada y pagada. La tasa de referencia reportada por el equipo es ~11.3% (cálculo manual, por validar con la medición automática) — el seguimiento automatizado debe subirla.</div>
 
         <div class="pipeline-wrap">
           <div class="pipeline">
@@ -610,6 +663,10 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
         <div class="alert alert-blue">
           <strong>Reingresos:</strong> Se crea un nuevo negocio asociado al mismo Contacto. Propiedad "Tipo de ingreso": Primer ingreso · Reingreso &lt;2 años (8 semanas) · Reingreso +2 años (12 semanas completas). Las semanas de extensión (13+) tienen costo adicional que se registra en HubSpot.
         </div>
+
+        <div class="alert alert-red">
+          <strong>Alcance — qué registra HubSpot y qué NO:</strong> HubSpot gestiona exclusivamente los hitos <strong>administrativos y de servicio</strong> del programa: admisión, documentos, pagos, coordinación de reuniones con la familia y egreso. <strong>No registra evolución clínica, diagnósticos ni contenido terapéutico</strong> — eso vive en la historia clínica, por fuera del CRM. Los hitos por semanas se mantienen en el pipeline porque son entregables de servicio y requisitos administrativos del programa (el reporte semanal es un compromiso con la familia; la reunión de semana 5 y el plan soporte de semana 12 requieren coordinación logística y son condición de egreso), no seguimiento terapéutico. Las tareas de acompañamiento a familias se asignan a Diana en HubSpot; Valeria las ejecuta sin necesidad de usuario propio.
+        </div>
       </div>
     </div>
 
@@ -617,8 +674,12 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
     <div id="page-workflows" class="page">
       <div class="section">
         <div class="section-eyebrow">Automatizaciones</div>
-        <div class="section-title">Todos los workflows — 17 automatizaciones</div>
-        <div class="section-sub">Las automatizaciones son la diferencia entre esta implementación y la de Triario. Eliminan el trabajo manual repetitivo y garantizan que nadie se caiga del proceso.</div>
+        <div class="section-title">Workflows priorizados — 22 automatizaciones</div>
+        <div class="section-sub">19 workflows de proceso + 3 de marketing. Las automatizaciones son la diferencia entre esta implementación y la de Triario: eliminan trabajo manual repetitivo y garantizan que nadie se caiga del proceso.</div>
+
+        <div class="alert alert-blue">
+          <strong>Cómo leer esta lista:</strong> ninguna automatización se construye sin validarse antes con el líder del proceso en su sesión de implementación. Las marcadas <strong>● Activo</strong> corresponden a la Fase 1 (SAC); las <strong>○ Borrador</strong> se activan en la fase de su pipeline; las <strong>◑ A validar</strong> quedaron señaladas para decidir en conjunto si aportan valor suficiente o se descartan.
+        </div>
 
         <div class="section-eyebrow">SAC · Primer contacto (5 workflows)</div>
         <div class="wf-list">
@@ -637,25 +698,109 @@ body{font-family:'DM Sans',sans-serif;background:#f8f7f4;color:#1a1a18;font-size
           <div class="wf-card"><div class="wf-icon" style="background:#fef2f2">🎯</div><div style="flex:1"><div class="wf-id">WF-08</div><div class="wf-name">Seguimiento a paciente indeciso post-valoración</div><div class="wf-desc">4 días en "Propuesta enviada" sin avanzar → tarea a Jessica: "Llamar a [Nombre], indeciso desde valoración del [fecha]". Esta automatización recupera más clientes.</div><span class="wf-trigger">Negocio inactivo 4 días en Propuesta</span></div><span class="wf-status wf-active">● Activo</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#f0fdf4">⭐</div><div style="flex:1"><div class="wf-id">WF-09</div><div class="wf-name">Encuesta NPS automática · Sesión 5</div><div class="wf-desc">Cuando "Sesiones completadas" = 5: correo automático con encuesta de satisfacción. Elimina el proceso manual de Carlos con MediLink + WhatsApp.</div><span class="wf-trigger">Sesiones completadas = 5</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#f0fdf4">🏆</div><div style="flex:1"><div class="wf-id">WF-10</div><div class="wf-name">Encuesta NPS final + flujo post-tratamiento</div><div class="wf-desc">Sesiones = 15: encuesta final + tarea a Carlos "Evaluar continuidad con [Nombre]" + oportunidad de recompra/referido.</div><span class="wf-trigger">Sesiones completadas = 15</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
-          <div class="wf-card"><div class="wf-icon" style="background:#fef5e7">🧪</div><div style="flex:1"><div class="wf-id">WF-11</div><div class="wf-name">Alerta prueba de orina · Sesión 6 · Adicciones</div><div class="wf-desc">Negocio llega a sesión 6 Y Patología = Adicciones → tarea a Jessica: "Confirmar que el valorador programó prueba de orina para [Nombre]".</div><span class="wf-trigger">Sesiones = 6 + Patología = Adicciones</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
+          <div class="wf-card"><div class="wf-icon" style="background:#fef5e7">🧪</div><div style="flex:1"><div class="wf-id">WF-11</div><div class="wf-name">Recordatorio administrativo · Sesión 6 · Programa Adicciones</div><div class="wf-desc">Negocio llega a sesión 6 Y Programa = Adicciones → tarea a Jessica: recordatorio de coordinar con el área clínica el componente de sesión 6 del programa. <strong>A validar:</strong> está en el borde de lo clínico — si se mantiene, es solo un recordatorio logístico; ningún resultado clínico se registra en HubSpot.</div><span class="wf-trigger">Sesiones = 6 + Programa = Adicciones</span></div><span class="wf-status wf-draft">◑ A validar</span></div>
         </div>
 
         <div class="gap"></div>
         <div class="section-eyebrow">Casa CAYA (6 workflows)</div>
         <div class="wf-list">
           <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">⚠️</div><div style="flex:1"><div class="wf-id">WF-12</div><div class="wf-name">Alerta de doble valoración incompleta</div><div class="wf-desc">Negocio en "Doble valoración" por más de 5 días → tarea a Diana: "Verificar que ambas valoraciones estén completadas".</div><span class="wf-trigger">Negocio inactivo 5 días</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
-          <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">🏠</div><div style="flex:1"><div class="wf-id">WF-13</div><div class="wf-name">Notificación a Valeria al ingreso</div><div class="wf-desc">Al entrar a "Ingreso realizado": tarea a Valeria — "Presentarte a la familia de [Nombre] en las próximas 48h y enviar primer reporte en 7 días".</div><span class="wf-trigger">Negocio → Ingreso realizado</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
-          <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">📅</div><div style="flex:1"><div class="wf-id">WF-14</div><div class="wf-name">Recordatorio reporte semanal Valeria</div><div class="wf-desc">Cada 7 días desde fecha de ingreso mientras el negocio está activo → tarea a Valeria: "Enviar reporte semanal a familia de [Nombre]".</div><span class="wf-trigger">Cada 7 días desde fecha ingreso</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
+          <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">🏠</div><div style="flex:1"><div class="wf-id">WF-13</div><div class="wf-name">Activación del acompañamiento a familia al ingreso</div><div class="wf-desc">Al entrar a "Ingreso realizado": tarea a Diana — coordinar que Valeria se presente a la familia de [Nombre] en las próximas 48h y envíe el primer reporte en 7 días. Valeria ejecuta sin usuario en HubSpot.</div><span class="wf-trigger">Negocio → Ingreso realizado</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
+          <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">📅</div><div style="flex:1"><div class="wf-id">WF-14</div><div class="wf-name">Recordatorio reporte semanal a familia</div><div class="wf-desc">Cada 7 días desde fecha de ingreso mientras el negocio está activo → tarea a Diana para coordinar con Valeria: "Enviar reporte semanal a familia de [Nombre]". Es un entregable de servicio a la familia, no seguimiento clínico.</div><span class="wf-trigger">Cada 7 días desde fecha ingreso</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">📌</div><div style="flex:1"><div class="wf-id">WF-15</div><div class="wf-name">Alerta semana 5 · Reunión de formulación</div><div class="wf-desc">Fecha ingreso + 35 días → tarea a SAC: "Coordinar reunión de formulación de caso con familia de [Nombre]".</div><span class="wf-trigger">Fecha ingreso + 35 días</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#fff1f2">🤝</div><div style="flex:1"><div class="wf-id">WF-16</div><div class="wf-name">Alerta semana 12 · Plan soporte</div><div class="wf-desc">Fecha ingreso + 77 días → tarea a Diana y Mauricio: "Coordinar reunión de plan soporte con red de apoyo de [Nombre]".</div><span class="wf-trigger">Fecha ingreso + 77 días</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#f0fdf4">🎓</div><div style="flex:1"><div class="wf-id">WF-17</div><div class="wf-name">Flujo post-egreso</div><div class="wf-desc">Al egresar: correo de bienvenida a grupos IAA + plan soporte · tarea a Carlos a 30 días "Check-in 1 mes con [Nombre]" · tarea a 90 días "Check-in 3 meses" · tarea a 180 días.</div><span class="wf-trigger">Negocio → Ceremonia de egreso</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
         </div>
 
         <div class="gap"></div>
-        <div class="section-eyebrow">Diana · Seguimiento admisiones (1 workflow adicional)</div>
+        <div class="section-eyebrow">Diana · Admisiones y cobros (2 workflows)</div>
         <div class="wf-list">
           <div class="wf-card"><div class="wf-icon" style="background:#fefce8">📞</div><div style="flex:1"><div class="wf-id">WF-18</div><div class="wf-name">Seguimiento a familia indecisa post-enganche</div><div class="wf-desc">Negocio en "Lista de espera / Indeciso" por más de 7 días → tarea a Diana: "Llamar a familia de [Nombre] — llevan X días pensando". Reemplaza la libreta de Diana.</div><span class="wf-trigger">Negocio inactivo 7 días</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
           <div class="wf-card"><div class="wf-icon" style="background:#fefce8">💰</div><div style="flex:1"><div class="wf-id">WF-19</div><div class="wf-name">Alerta de cuota vencida · Casa CAYA</div><div class="wf-desc">Fecha de cuota según acuerdo de pago + 7 días sin registro de pago → tarea a Diana: "Gestionar cobro de cuota [N] de [Nombre]".</div><span class="wf-trigger">Fecha cuota + 7 días sin pago</span></div><span class="wf-status wf-draft">○ Borrador</span></div>
+        </div>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">Marketing (3 workflows)</div>
+        <div class="wf-list">
+          <div class="wf-card"><div class="wf-icon" style="background:#eff6ff">💸</div><div style="flex:1"><div class="wf-id">M-01</div><div class="wf-name">Desactivación de contactos de marketing post-campaña</div><div class="wf-desc">Al finalizar cada campaña, los contactos inscritos vuelven automáticamente a estado "no marketing". Controla el costo de la licencia — hoy Mariale lo hace a mano por temor a la sobrefacturación.</div><span class="wf-trigger">Fin de campaña / salida de lista activa</span></div><span class="wf-status wf-active">● Fase 1</span></div>
+          <div class="wf-card"><div class="wf-icon" style="background:#eff6ff">🔗</div><div style="flex:1"><div class="wf-id">M-03</div><div class="wf-name">Actualización de marcaje primera/última fuente</div><div class="wf-desc">Extiende los workflows de atribución de Triario para cubrir todos los dominios y formularios nuevos (TAC, colegios, agendamiento, ManyChat). Sin esto, la atribución se rompe con cada lanzamiento y los contactos quedan sin marcar — el origen de los 20.000 contactos huérfanos.</div><span class="wf-trigger">Nuevo formulario / dominio conectado</span></div><span class="wf-status wf-active">● Fase 1</span></div>
+          <div class="wf-card"><div class="wf-icon" style="background:#eff6ff">🎯</div><div style="flex:1"><div class="wf-id">M-02</div><div class="wf-name">Lead scoring · Prevención B2B</div><div class="wf-desc">Suma puntos por tamaño de institución (+200 personas = hot lead), cargo del contacto e interacción con contenido; notifica al comercial de Prevención al superar el umbral. Quedó pendiente de la implementación de Triario.</div><span class="wf-trigger">Propiedades de empresa + comportamiento</span></div><span class="wf-status wf-draft">○ Fase 4</span></div>
+        </div>
+
+        <div class="gap"></div>
+        <div class="alert alert-green">
+          <strong>Criterio de curaduría:</strong> esta lista prioriza automatizaciones que eliminan trabajo manual real identificado en las sesiones (el barrido de los jueves de Camila, la libreta de Diana, las encuestas manuales de Carlos con MediLink + WhatsApp + Excel, el apagado manual de contactos de Mariale). Cada una se valida con su líder de proceso antes de activarse — las que no demuestren valor en la sesión de validación se descartan sin construirse.
+        </div>
+      </div>
+    </div>
+
+    <!-- INFORMES -->
+    <div id="page-informes" class="page">
+      <div class="section">
+        <div class="section-eyebrow">Reportería · Lo que cada líder verá cada semana</div>
+        <div class="section-title">Informes y dashboards por área</div>
+        <div class="section-sub">Cada líder de proceso tendrá un dashboard con sus indicadores. Esta lista delimita los informes comprometidos por fase, construidos sobre lo que cada área pidió en las sesiones de diagnóstico. Todo informe adicional se evalúa como alcance nuevo.</div>
+
+        <div class="section-eyebrow">📣 Dashboard Marketing — Mariale · Fase 1</div>
+        <table class="prop-table">
+          <tr><th>Informe</th><th>Qué responde</th><th>Fuente</th></tr>
+          <tr><td><strong>Leads por fuente original</strong></td><td>¿De dónde vienen los contactos? (orgánico, redes, lead magnets, Efrén, referidos)</td><td>Marcaje primera fuente + UTMs + propiedad Origen</td></tr>
+          <tr><td><strong>Conversión por iniciativa: lead → valoración → tratamiento</strong></td><td>¿Mis iniciativas funcionan o no? Cierra el ciclo completo que hoy no existe — fin del "operar a ciegas"</td><td>Pipeline SAC + Negocios con fuente conservada</td></tr>
+          <tr><td><strong>Rendimiento de lead magnets</strong></td><td>Descargas → leads → valoraciones por cada recurso del mes</td><td>Formularios + secuencias de nutrición</td></tr>
+          <tr><td><strong>Contactos de marketing activos</strong></td><td>Control del costo de la licencia — evitar sobrefacturación</td><td>Estado de contacto de marketing + M-01</td></tr>
+          <tr><td><strong>Rendimiento de correos</strong></td><td>Apertura y clics por secuencia: qué contenidos nutren mejor</td><td>Email marketing nativo</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">🎧 Dashboard SAC — Carlos León · Fase 1</div>
+        <table class="prop-table">
+          <tr><th>Informe</th><th>Qué responde</th><th>Fuente</th></tr>
+          <tr><td><strong>Leads por canal de contacto</strong></td><td>WhatsApp vs formulario vs llamada — el informe que hoy Carlos arma a mano para las juntas con Juan Carlos</td><td>Propiedad Canal de contacto</td></tr>
+          <tr><td><strong>Conversión contacto → valoración agendada</strong></td><td>El KPI del área. Referencia actual: ~11.3% calculado a mano por el equipo — la línea base oficial la fija la medición automática</td><td>Pipeline SAC</td></tr>
+          <tr><td><strong>Motivos de no conversión</strong></td><td>Dónde y por qué se caen los leads (costo, sin respuesta, no apto, derivado)</td><td>Propiedad Motivo de no conversión</td></tr>
+          <tr><td><strong>Leads sin actividad +2 días</strong></td><td>Control operativo del seguimiento — reemplaza el barrido manual de los jueves</td><td>WF-02 / WF-03</td></tr>
+          <tr><td><strong>Valoraciones: agendadas vs pagadas vs realizadas</strong></td><td>Control del cuello de botella del pago de la valoración</td><td>Pipeline SAC + propiedad de pago</td></tr>
+          <tr><td><strong>Tiempo promedio por etapa</strong></td><td>Velocidad de gestión del equipo</td><td>Reporte nativo de pipeline</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">🩺 Dashboard Tratamiento — Ernesto · Fase 2 (consulta y supervisión)</div>
+        <table class="prop-table">
+          <tr><th>Informe</th><th>Qué responde</th><th>Fuente</th></tr>
+          <tr><td><strong>Conversión valoración → inicio de tratamiento</strong></td><td>El KPI del área de tratamiento. Referencia reportada en sesión: ~50%, por validar con la medición automática</td><td>Pipeline Ambulatorio</td></tr>
+          <tr><td><strong>Negocios activos por fase del programa y terapeuta</strong></td><td>Carga y avance administrativo — sin ningún detalle clínico</td><td>Propiedades de negocio</td></tr>
+          <tr><td><strong>Documentos pendientes de firma</strong></td><td>Riesgo administrativo: nadie inicia sin los 3 documentos</td><td>Checkboxes de contratos + WF-07</td></tr>
+          <tr><td><strong>NPS sesión 5 y NPS final</strong></td><td>Satisfacción del programa — reemplaza el proceso manual MediLink + WhatsApp + Excel</td><td>Encuestas automáticas WF-09 / WF-10</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">🏠 Dashboard Casa CAYA — Diana · Fase 3</div>
+        <table class="prop-table">
+          <tr><th>Informe</th><th>Qué responde</th><th>Fuente</th></tr>
+          <tr><td><strong>Pipeline de admisión en tiempo real</strong></td><td>Casos por etapa, incluidos lista de espera e indecisos +7 días</td><td>Pipeline Casa CAYA + WF-18</td></tr>
+          <tr><td><strong>Ocupación por casa</strong></td><td>Capacidad disponible en Casa Sentido (18-35) y Casa Existencia (35+)</td><td>Propiedad Casa asignada</td></tr>
+          <tr><td><strong>Cuotas vencidas</strong></td><td>Cobros pendientes según acuerdo de pago</td><td>Propiedades de pago + WF-19</td></tr>
+          <tr><td><strong>Reingresos</strong></td><td>Primer ingreso vs reingreso — insumo para el programa post-egreso</td><td>Propiedad Tipo de ingreso</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="section-eyebrow">📊 Dashboard Gerencia — Juan Carlos · Toño · Solo lectura</div>
+        <table class="prop-table">
+          <tr><th>Informe</th><th>Qué responde</th><th>Fuente</th></tr>
+          <tr><td><strong>Funnel consolidado: lead → valoración → tratamiento</strong></td><td>La foto completa del negocio en un solo lugar — hoy no existe en ninguna herramienta</td><td>Todos los pipelines</td></tr>
+          <tr><td><strong>Ingresos por pipeline</strong></td><td>Montos de negocios ganados por mes: Ambulatorio vs Casa CAYA</td><td>Objeto Negocio</td></tr>
+          <tr><td><strong>Comparativo mensual de conversión</strong></td><td>Tendencia de los KPIs de cada área</td><td>Reportes nativos</td></tr>
+        </table>
+
+        <div class="gap"></div>
+        <div class="alert alert-amber">
+          <strong>Fuera de alcance en esta fase:</strong> los indicadores de chat (volumen de conversaciones de WhatsApp, tiempos de respuesta del chat) dependen de la integración con Conco y no se comprometen aquí — HubSpot reporta sobre todo lo que entra al CRM. Cuando el chat se conecte a HubSpot (evaluación a 6-12 meses según lo conversado con Carlos), esos indicadores se suman al dashboard de SAC.
+        </div>
+        <div class="alert alert-blue">
+          <strong>Sobre las cifras de referencia:</strong> los indicadores actuales mencionados en este documento (~430 registros/mes, ~11.3%, ~50%) fueron reportados por los equipos en las sesiones de diagnóstico y se calculan hoy de forma manual. Son aproximados y están sujetos a validación: la línea base oficial de cada KPI se establece con la primera medición automática de HubSpot tras implementar cada proceso.
+        </div>
+        <div class="alert alert-blue">
+          <strong>Validación por área:</strong> cada dashboard se construye y se valida con su líder en la sesión de implementación de su proceso. Esta lista es el compromiso de entrega — delimitarla protege al proyecto de solicitudes abiertas y le da a cada área certeza de lo que va a recibir.
         </div>
       </div>
     </div>
